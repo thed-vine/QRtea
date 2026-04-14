@@ -18,7 +18,7 @@ export default function Home() {
     }
 
     qrRef.current.download({
-      name: `qrtea-${Date.now()}`,
+      name: `qrtea-${link.trim().slice(0, 10).replace(/\s+/g, "-") || "qr-code"}`,
       format: 'png',
       size: 1000,
     });
@@ -42,22 +42,16 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-[url('/@QRtea.png')] bg-cover bg-center bg-no-repeat bg-fixed">
-      {/* Overlay for better readability */}
-      <div className="absolute inset-0 bg-black/30" />
-
-      {/* Content Container */}
+      <div className="absolute inset-0 bg-black/30 w-screen h-screen" />
       <div className="relative z-10 flex flex-col items-center w-full max-w-2xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-modak text-white drop-shadow-lg">
             Welcome to QRtea
           </h2>
           <p className="mt-2 sm:mt-3 text-sm sm:text-base md:text-lg text-gray-200">
-            Generate beautiful QR codes instantly
+            Generate beautiful QR codes instantly just for CE Isheri
           </p>
         </div>
-
-        {/* Input Section */}
         <div className="w-full max-w-md flex flex-col items-center gap-4 sm:gap-5">
           <div className="w-full liquid-glass rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300">
             <Input
@@ -77,8 +71,6 @@ export default function Home() {
             Generate QR Code
           </Button>
         </div>
-
-        {/* QR Code Display */}
         {qrValue && (
           <div className="mt-6 sm:mt-8 flex flex-col items-center gap-4 w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h3 className="text-lg sm:text-xl font-semibold text-white">
