@@ -9,7 +9,8 @@ export default function Home() {
   const [qrValue, setQrValue] = useState("");
   const qrRef = useRef<ReactQRCodeRef>(null);
 
-  const isValidInput = link.trim().length > 0;
+
+  const isValidInput = link.trim().length > 0
 
   const handleDownload = useCallback(() => {
     if (!qrRef.current) {
@@ -26,13 +27,13 @@ export default function Home() {
   }, []);
 
   const generateQRCode = useCallback(() => {
-    if (!isValidInput) {
+    if (!link) {
       toast.error("Please enter a link or text");
       return;
     }
     setQrValue(link);
     toast.success("QR Code generated successfully!");
-  }, [link, isValidInput]);
+  }, [link]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -53,7 +54,7 @@ export default function Home() {
           </p>
         </div>
         <div className="w-full max-w-md flex flex-col items-center gap-4 sm:gap-5">
-          <div className="w-full liquid-glass rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300">
+          <div className="w-full rounded-xl sm:rounded-2xl overflow-hidden bg-white/10 border border-white/20 transition-all duration-300 focus-within:border-[#8B4513] focus-within:ring-2 focus-within:ring-[#8B4513]/30">
             <Input
               className="w-full bg-transparent text-white placeholder:text-gray-300 px-4 py-3 sm:px-5 sm:py-4 md:p-5 text-base sm:text-lg focus:outline-none border-none"
               type="text"
@@ -64,9 +65,9 @@ export default function Home() {
             />
           </div>
           <Button
-            className="w-full liquid-glass-button text-white text-lg sm:text-xl md:text-2xl px-6 py-3 sm:px-8 sm:py-4 md:p-6 rounded-xl sm:rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#8B4513] hover:bg-[#A0522D] active:bg-[#6B3410] text-white text-lg sm:text-xl md:text-2xl px-6 py-3 sm:px-8 sm:py-4 md:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
             onClick={generateQRCode}
-            disabled={!isValidInput}
+            disabled={isValidInput}
           >
             Generate QR Code
           </Button>
@@ -78,34 +79,32 @@ export default function Home() {
             </h3>
             
             {/* QR Code Container with responsive sizing */}
-            <div className="liquid-glass-card p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
-              <div className="w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px]">
-                <ReactQRCode
-                  ref={qrRef}
-                  value={qrValue}
-                  dataModulesSettings={{
-                    color: "#003262"
-                  }}
-                  size={400}
-                  imageSettings={{
-                    src: '/logo-church.png',
-                    width: 60,
-                    height: 60,
-                    x: undefined,
-                    y: undefined,
-                    excavate: true,
-                    opacity: 1,
-                  }}
-                  finderPatternOuterSettings={{
-                    style: 'rounded',
-                    color: "#ffffff",
-                  }}
-                  finderPatternInnerSettings={{
-                    style: "rounded",
-                    color: "#003262",
-                  }}
-                />
-              </div>
+            <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
+              <ReactQRCode
+                dataModulesSettings={{
+                  color: "#003262",
+                }}
+                imageSettings={{
+                src: '/logo-church.png',
+                width: 60,
+                height: 60,
+                x: undefined,
+                y: undefined,
+                excavate: true,
+                opacity: 1,
+              }}
+              finderPatternOuterSettings={{
+                style: 'rounded',
+                color: "#FFD700",
+              }}
+              finderPatternInnerSettings={{
+                style: 'rounded',
+                color: "#003262",
+              }}
+              size={250}
+              marginSize={2}
+              value={link}
+              />
             </div>
 
             {/* Download Button */}
@@ -114,7 +113,7 @@ export default function Home() {
                 Download your QR code as a high-quality image
               </p>
               <Button
-                className="liquid-glass text-white px-6 py-2 sm:px-8 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:bg-white/20 active:bg-white/30 hover:scale-105"
+                className="bg-[#8B4513] hover:bg-[#A0522D] active:bg-[#6B3410] text-white px-6 py-2 sm:px-8 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg"
                 onClick={handleDownload}
               >
                 Download QR Code
