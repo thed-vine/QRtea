@@ -81,7 +81,7 @@ export default function Home() {
             </h3>
 
             {/* QR Code Container with responsive sizing */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
+            <div className="bg-none p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
               <ReactQRCode
                 ref={qrRef}
                 value={qrValue} // Use the state that only updates on "Generate"
