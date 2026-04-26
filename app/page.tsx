@@ -9,8 +9,7 @@ export default function Home() {
   const [qrValue, setQrValue] = useState("");
   const qrRef = useRef<ReactQRCodeRef>(null);
 
-
-  const isValidInput = link.trim().length > 0
+  const isValidInput = link.trim().length > 0;
 
   const handleDownload = useCallback(() => {
     if (!qrRef.current) {
@@ -20,7 +19,7 @@ export default function Home() {
 
     qrRef.current.download({
       name: `qrtea-${link.trim().slice(0, 10).replace(/\s+/g, "-") || "qr-code"}`,
-      format: 'png',
+      format: "png",
       size: 1000,
     });
     toast.success("QR code downloaded!");
@@ -35,11 +34,14 @@ export default function Home() {
     toast.success("QR Code generated successfully!");
   }, [link]);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      generateQRCode();
-    }
-  }, [generateQRCode]);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        generateQRCode();
+      }
+    },
+    [generateQRCode],
+  );
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-[url('/@QRtea.png')] bg-cover bg-center bg-no-repeat bg-fixed">
@@ -56,7 +58,7 @@ export default function Home() {
         <div className="w-full max-w-md flex flex-col items-center gap-4 sm:gap-5">
           <div className="w-full rounded-xl sm:rounded-2xl overflow-hidden bg-white/10 border border-white/20 transition-all duration-300 focus-within:border-[#8B4513] focus-within:ring-2 focus-within:ring-[#8B4513]/30">
             <Input
-              className="w-full bg-transparent text-white placeholder:text-gray-300 px-4 py-3 sm:px-5 sm:py-4 md:p-5 text-base sm:text-lg focus:outline-none border-none"
+              className="w-full bg-none text-white placeholder:text-gray-300 px-4 py-3 sm:px-5 sm:py-4 md:p-5 text-base sm:text-lg focus:outline-none border-none"
               type="text"
               placeholder="Enter URL or text..."
               value={link}
@@ -77,33 +79,31 @@ export default function Home() {
             <h3 className="text-lg sm:text-xl font-semibold text-white">
               Your QR Code
             </h3>
-            
+
             {/* QR Code Container with responsive sizing */}
             <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
               <ReactQRCode
+                ref={qrRef}
+                value={qrValue} // Use the state that only updates on "Generate"
+                size={250}
+                marginSize={2}
                 dataModulesSettings={{
                   color: "#003262",
                 }}
                 imageSettings={{
-                src: '/logo-church.png',
-                width: 60,
-                height: 60,
-                x: undefined,
-                y: undefined,
-                excavate: true,
-                opacity: 1,
-              }}
-              finderPatternOuterSettings={{
-                style: 'rounded',
-                color: "#FFD700",
-              }}
-              finderPatternInnerSettings={{
-                style: 'rounded',
-                color: "#003262",
-              }}
-              size={250}
-              marginSize={2}
-              value={link}
+                  src: "/logo-church.png",
+                  width: 50, // Slightly smaller (20% of total size) is safer
+                  height: 50,
+                  excavate: true, // This cuts out the pixels behind the logo so they don't bleed through
+                }}
+                finderPatternOuterSettings={{
+                  style: "rounded",
+                  color: "#FFD700",
+                }}
+                finderPatternInnerSettings={{
+                  style: "rounded",
+                  color: "#003262",
+                }}
               />
             </div>
 
