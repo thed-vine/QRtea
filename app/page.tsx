@@ -12,25 +12,28 @@ export default function Home() {
   const isValidInput = link.trim().length > 0;
 
   const handleDownload = useCallback(() => {
-    if (!qrRef.current) {
+    if (!qrRef.current || !qrValue) {
       toast.error("Generate a QR code first!");
       return;
     }
 
+    const filenameBase = qrValue.trim().slice(0, 30).replace(/[^\w-]+/g, "-") || "qr-code";
+
     qrRef.current.download({
-      name: `qrtea-${link.trim().slice(0, 10).replace(/\s+/g, "-") || "qr-code"}`,
+      name: `qrtea-${filenameBase}`,
       format: "png",
       size: 1000,
     });
     toast.success("QR code downloaded!");
-  }, []);
+  }, [qrValue]);
 
   const generateQRCode = useCallback(() => {
-    if (!link) {
+    const trimmed = link.trim();
+    if (!trimmed) {
       toast.error("Please enter a link or text");
       return;
     }
-    setQrValue(link);
+    setQrValue(trimmed);
     toast.success("QR Code generated successfully!");
   }, [link]);
 
@@ -69,7 +72,7 @@ export default function Home() {
           <Button
             className="w-full bg-[#8B4513] hover:bg-[#A0522D] active:bg-[#6B3410] text-white text-lg sm:text-xl md:text-2xl px-6 py-3 sm:px-8 sm:py-4 md:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
             onClick={generateQRCode}
-            disabled={isValidInput}
+            disabled={!isValidInput}
           >
             Generate QR Code
           </Button>
@@ -81,29 +84,20 @@ export default function Home() {
             </h3>
 
             {/* QR Code Container with responsive sizing */}
-            <div className="bg-none p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
+            <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl border-4 border-[#8B4513]/20">
               <ReactQRCode
                 ref={qrRef}
                 value={qrValue} // Use the state that only updates on "Generate"
                 size={250}
                 marginSize={2}
-                dataModulesSettings={{
-                  color: "#003262",
-                }}
+                
                 imageSettings={{
                   src: "/logo-church.png",
                   width: 50, // Slightly smaller (20% of total size) is safer
                   height: 50,
                   excavate: true, // This cuts out the pixels behind the logo so they don't bleed through
                 }}
-                finderPatternOuterSettings={{
-                  style: "rounded",
-                  color: "#FFD700",
-                }}
-                finderPatternInnerSettings={{
-                  style: "rounded",
-                  color: "#003262",
-                }}
+                
               />
             </div>
 
@@ -115,6 +109,7 @@ export default function Home() {
               <Button
                 className="bg-[#8B4513] hover:bg-[#A0522D] active:bg-[#6B3410] text-white px-6 py-2 sm:px-8 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg"
                 onClick={handleDownload}
+                disabled={!qrValue}
               >
                 Download QR Code
               </Button>
